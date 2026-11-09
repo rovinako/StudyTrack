@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}{{ lecture.title }} · StudyTrack{% endblock %}
+{% block content %}
+<div class="breadcrumbs"><a href="{{ url_for('learning.materials',course_id=course.id) }}">{{ course.title }} lectures</a></div>
+<div class="page-title"><div><p class="eyebrow">CHECK YOUR SOURCE</p><h1>{{ lecture.title }}</h1><p class="muted">{{ lecture.filename }} · {{ lecture.sections|length }} readable sections</p></div><a class="button" href="{{ url_for('learning.create_guide',course_id=course.id) }}">Build a study guide</a></div>
+<p class="caption">Check that the extracted text makes sense before studying. PDF layouts and equations may need correction in the original file. Image-only pages do not appear here.</p>
+<section class="panel">{% for section in lecture.sections %}<article class="source-section" id="section-{{ loop.index }}"><h2>{{ section.location }}</h2><p class="prewrap">{{ section.text }}</p></article>{% endfor %}</section>
+{% endblock %}

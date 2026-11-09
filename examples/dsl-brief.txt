@@ -1,0 +1,1 @@
+Propose a small functional Racket study-allocation DSL. Input syntax: (study-plan (available 120) (task 1 60) (task 2 90)). Allocate 60 minutes to task 1 and 60 to task 2. Preserve task order, reject negative budgets and duplicate positive-integer task IDs, and leave inputs unchanged. Include RackUnit checks. Do not change or claim to have tested the existing project files.

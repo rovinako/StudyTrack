@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% from 'base.html' import csrf with context %}
+{% block content %}
+  <div class="page-title">
+    <div>
+      <p class="eyebrow">YOUR COURSEWORK</p>
+      <h1>Courses & assignments</h1>
+      <p class="muted">Keep each course’s grades and deadlines together.</p>
+    </div>
+  </div>
+  <div class="split">
+    <section class="panel">
+      <h2>Your courses</h2>
+      {% for c in courses %}
+        <a class="task-row"
+           href="{{ url_for('web.course_detail',course_id=c.id) }}">
+          <div>
+            <strong>{{ c.title }}</strong>
+            <span class="muted">Target {{ c.target|grade }} · {{ c.open_count }} open assignments</span>
+          </div>
+          <strong>{{ c.summary.current|grade }}</strong>
+        </a>
+      {% else %}
+        <p class="muted">No courses yet. Add one to get started.</p>
+      {% endfor %}
+    </section>
+    <section class="panel">
+      <h2>Add a course</h2>
+      <form method="post" class="stack">
+        {{ csrf() }}
+        <label>
+          Course name
+          <input name="title" maxlength="100" required placeholder="e.g. CMPSC 460">
+        </label>
+        <label>
+          Target grade (%)
+          <input type="number"
+                 name="target"
+                 value="90"
+                 min="0"
+                 max="100"
+                 step="0.1"
+                 required>
+        </label>
+        <button>Add course</button>
+      </form>
+    </section>
+  </div>
+{% endblock %}

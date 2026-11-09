@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Study materials · StudyTrack{% endblock %}
+{% block content %}
+<div class="page-title"><div><p class="eyebrow">LEARN FROM YOUR LECTURES</p><h1>Your study materials</h1><p class="muted">Upload a lecture, set your goal, and build a guide for your next study session.</p></div></div>
+<div class="course-grid">
+{% for course in courses %}
+<section class="panel stack">
+  <h2>{{ course.title }}</h2><p>Target {{ course.target|grade }} · {{ course.lecture_count }} lecture{{ '' if course.lecture_count == 1 else 's' }}</p>
+  <a class="button" href="{{ url_for('learning.materials', course_id=course.id) }}">Open lecture library</a>
+  <a href="{{ url_for('learning.create_guide', course_id=course.id) }}">Build a study guide</a>
+</section>
+{% else %}
+<section class="empty"><h2>Your first course comes first</h2><p>Add a course and a target grade, then upload its lectures here.</p><a class="button" href="{{ url_for('web.courses') }}">Add a course</a></section>
+{% endfor %}
+</div>
+{% endblock %}

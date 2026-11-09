@@ -1,0 +1,43 @@
+{
+  "review_date": "2026-11-08",
+  "results": [
+    {
+      "prototype": "Imperative",
+      "command": [
+        "-m",
+        "prototypes.imperative"
+      ],
+      "expected": "86.0",
+      "actual": "86.0",
+      "passed": true
+    },
+    {
+      "prototype": "Object-oriented",
+      "command": [
+        "-m",
+        "prototypes.object_oriented"
+      ],
+      "expected": "86.0",
+      "actual": "86.0",
+      "passed": true
+    },
+    {
+      "prototype": "Functional",
+      "command": [
+        "prototypes/functional.rkt"
+      ],
+      "expected": "86.0",
+      "actual": "86.0",
+      "passed": true
+    },
+    {
+      "prototype": "Declarative",
+      "command": [
+        ":memory:"
+      ],
+      "expected": "A",
+      "actual": "A",
+      "passed": true
+    }
+  ]
+}

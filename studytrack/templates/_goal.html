@@ -1,0 +1,6 @@
+<section class="goal-callout {{ 'goal-warning' if goal.status == 'unreachable' }}">
+  <p class="eyebrow">YOUR TARGET: {{ goal.target|grade }}</p>
+  <h2>{{ goal.message }}</h2>
+  {% if goal.missing > 0.000001 %}<p class="caption">{{ '%g'|format(goal.missing) }}% of course weight has not been entered yet. This estimate assumes the remaining course weight will total {{ '%g'|format(goal.remaining) }}%. Add the rest of your syllabus weights for a complete picture.</p>{% endif %}
+  <p class="caption">Required average = (target − final-grade points earned) ÷ remaining weight × 100. This is grade arithmetic, not a prediction of what studying will earn.</p>
+</section>

@@ -1,0 +1,1 @@
+StudyTrack Software is an education software student project led by Rovena Nako. Its slogan is Stay on Track. Keep Improving. The product connects weighted grades and uploaded lecture notes to reviewed study guides. Propose responsibilities for the eight required departments and a practical review handoff for an individual student filling these roles.

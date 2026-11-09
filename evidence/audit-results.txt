@@ -1,0 +1,9 @@
+Score above 100
+Original: {'current': 110.0, 'earned': 110.0, 'graded_weight': 100, 'configured_weight': 100}
+Corrected: rejected: Invalid score or weight.
+Negative time
+Original: {'sessions': [], 'unused_minutes': -1}
+Corrected: rejected: Available minutes must be a whole number from 0 to 1440.
+Duplicate task IDs
+Original: {'sessions': [{'id': 1, 'minutes': 60}, {'id': 1, 'minutes': 60}], 'unused_minutes': 0}
+Corrected: rejected: Task IDs must be unique.

@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="empty">
+    <h1>We couldn’t complete that.</h1>
+    <p>{{ message }}</p>
+    <a class="button" href="{{ url_for('web.dashboard') }}">Return to overview</a>
+  </section>
+{% endblock %}

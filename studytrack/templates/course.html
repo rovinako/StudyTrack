@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% from 'base.html' import csrf with context %}
+{% block title %}
+  {{ course.title }} · StudyTrack{% endblock %}
+{% block content %}
+  <a href="{{ url_for('web.courses') }}">All courses</a>
+  <div class="page-title">
+    <div>
+      <p class="eyebrow">COURSE PROGRESS</p>
+      <h1>{{ course.title }}</h1>
+      <p class="muted">Target grade: {{ course.target|grade }}</p>
+    </div>
+    <div>
+      <strong class="grade-large">{{ summary.current|grade }}</strong>
+      <p class="muted">Current grade on scored work</p>
+    </div>
+  </div>
+  <div class="stats">
+    <div>
+      <span>Final-grade points earned</span>
+      <strong>
+        {{ '%.1f'|format(summary.earned) }}
+        <small>/ 100</small>
+      </strong>
+    </div>
+    <div>
+      <span>Weight with a score</span>
+      <strong>{{ '%g'|format(summary.graded_weight) }}%</strong>
+    </div>
+    <div>
+      <span>Weight left to assign</span>
+      <strong>{{ '%g'|format(remaining) }}%</strong>
+    </div>
+  </div>
+  <p class="caption">Current grade uses only scored assignments. An empty score is ungraded. Enter 0 only for an actual zero. These percentages are not GPA.</p>
+  {% include '_goal.html' %}
+  <section class="panel course-learning">
+    <div><p class="eyebrow">STUDY TOWARD YOUR GOAL</p><h2>Your lectures, turned into a plan</h2><p class="muted">{{ lecture_count }} lecture{{ '' if lecture_count == 1 else 's' }} uploaded. Use your target and course material to create a timed guide with recall practice.</p>
+    <div class="action-row"><a class="button" href="{{ url_for('learning.create_guide', course_id=course.id) }}">Build a study guide</a><a class="button secondary" href="{{ url_for('learning.materials', course_id=course.id) }}">Upload lectures</a></div></div>
+    <form class="stack target-form" method="post" action="{{ url_for('learning.update_target', course_id=course.id) }}">{{ csrf() }}<label>My target grade (%)<input name="target" type="number" min="0" max="100" step="0.01" value="{{ course.target }}" required></label><button class="secondary">Update target</button></form>
+  </section>
+  <section class="panel saved">
+    <h2>Assignments</h2>
+    {% for a in assignments %}
+      <article class="assignment">
+        <div>
+          <h3>{{ a.title }}</h3>
+          <p class="muted">Due {{ a.due }} · {{ '%g'|format(a.weight) }}% weight · {{ a.minutes }} min</p>
+        </div>
+        <form class="inline-form"
+              method="post"
+              action="{{ url_for('web.update_assignment',assignment_id=a.id) }}">
+          {{ csrf() }}
+          <label>
+            Score (%)
+            <input aria-label="Score for {{ a.title }}"
+                   name="score"
+                   type="number"
+                   min="0"
+                   max="100"
+                   step="0.01"
+                   value="{{ a.score if a.score is not none else '' }}"
+                   placeholder="Ungraded">
+          </label>
+          <label class="check">
+            <input type="checkbox"
+                   name="completed"
+                   value="yes"
+                   {{ 'checked' if a.completed }}> Completed
+          </label>
+          <button class="secondary">Save</button>
+        </form>
+        <form method="post"
+              action="{{ url_for('web.delete_assignment',assignment_id=a.id) }}"
+              data-confirm="Delete this assignment? Its score and weight will be removed.">
+          {{ csrf() }}
+          <button class="text-button danger" aria-label="Delete {{ a.title }}">Delete</button>
+        </form>
+      </article>
+    {% else %}
+      <p class="muted">Add your first assignment below.</p>
+    {% endfor %}
+  </section>
+  <section class="panel add-assignment">
+    <h2>Add an assignment</h2>
+    <form method="post" class="form-grid">
+      {{ csrf() }}
+      <label>
+        Assignment name
+        <input name="title"
+               maxlength="100"
+               required
+               placeholder="e.g. Paradigm prototypes">
+      </label>
+      <label>
+        Due date
+        <input type="date" name="due" required>
+      </label>
+      <label>
+        Weight in final grade (%)
+        <input name="weight"
+               type="number"
+               min="0.01"
+               max="{{ remaining }}"
+               step="0.01"
+               required>
+      </label>
+      <label>
+        Estimated study minutes
+        <input name="minutes" type="number" min="1" max="1440" value="60" required>
+      </label>
+      <label>
+        Score (%) · optional
+        <input name="score"
+               type="number"
+               min="0"
+               max="100"
+               step="0.01"
+               placeholder="Leave empty if ungraded">
+      </label>
+      <div class="form-action">
+        <button {{ 'disabled' if remaining < 0.01 }}>Add assignment</button>
+      </div>
+    </form>
+  </section>
+{% endblock %}

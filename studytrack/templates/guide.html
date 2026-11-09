@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% from 'base.html' import csrf with context %}
+{% block title %}{{ course.title }} study guide · StudyTrack{% endblock %}
+{% block content %}
+<div class="breadcrumbs"><a href="{{ url_for('learning.create_guide',course_id=course.id) }}">{{ course.title }} study guides</a></div>
+<div class="page-title"><div><p class="eyebrow">{{ guide.mode }}</p><h1>Your {{ guide.available }}-minute study guide</h1><p class="muted">{{ guide.approach }} · {{ 'Reviewed and saved' if record.reviewed_text is not none else 'Draft stored locally' }}</p></div><a class="button secondary" href="{{ url_for('learning.create_guide',course_id=course.id) }}">Build another guide</a></div>
+{% set goal = guide.goal %}{% include '_goal.html' %}
+{% if guide.assessment %}<p><strong>Preparing for {{ guide.assessment.title }}</strong> · due {{ guide.assessment.due }} · {{ '%g'|format(guide.assessment.weight) }}% of the course. The required average above applies to all remaining work, not just this assessment.</p>{% endif %}
+<p class="caption">Snapshot from {{ record.created }} UTC. Build a new guide after changing grades or materials. This guide covers selected passages, not the entire course. The study-time split is a planning rule, not a guarantee of your target grade.</p>
+{% for session in guide.sessions %}
+<section class="panel guide-session">
+<div class="section-title"><h2>{{ loop.index }}. {{ session.topic }}</h2><strong class="minute-label">{{ session.minutes }} min</strong></div>
+<p class="caption">Source [{{ session.source.id }}]: {% if session.source.lecture_id in existing_lectures %}<a href="{{ url_for('learning.lecture',lecture_id=session.source.lecture_id) }}#section-{{ session.source.section }}">{{ session.source.lecture }} · {{ session.source.location }}</a>{% else %}{{ session.source.lecture }} · {{ session.source.location }} (lecture removed; excerpt retained below){% endif %}</p>
+<div class="study-steps"><div><span>{{ session.read }} MIN</span><h3>Read & outline</h3><p>Identify the main idea and write a short explanation in your own words.</p></div><div><span>{{ session.practice }} MIN</span><h3>Recall & apply</h3><p>Close the notes. Explain the idea aloud and work through an example from the lecture.</p></div><div><span>{{ session.check }} MIN</span><h3>Check & correct</h3><p>Compare with the passage. Mark anything you could not recall for the next session.</p></div></div>
+<details open><summary>Key passage from your lecture</summary><blockquote class="prewrap">{{ session.source.text }}</blockquote></details>
+<div class="recall"><h3>Recall check</h3><p>{{ session.question.question }}</p><details><summary>Reveal answer</summary><p>{{ session.question.answer }}</p>{% if session.question.evidence %}<p class="caption">From the lecture: {{ session.question.evidence }}</p>{% endif %}</details></div>
+{% for section in guide.ai_sections if section.source_id == session.source.id %}<div class="ai-note"><h3>AI explanation · check against the passage</h3><p class="prewrap">{{ section.explanation }}</p><p><strong>Practice:</strong> {{ section.question }}</p><details><summary>Suggested answer</summary><p>{{ section.answer }}</p><blockquote>{{ section.quote }}</blockquote></details></div>{% endfor %}
+</section>
+{% endfor %}
+<section class="panel saved"><h2>Review and save your guide</h2><p class="caption">Edit the text below to personalize it. The saved/downloaded version uses your edits; the source cards above preserve the original generated guide.</p>
+<form method="post" class="stack">{{ csrf() }}<label>Your study guide<textarea name="content" rows="12" maxlength="24000" required>{{ content }}</textarea></label><div class="action-row"><button>Save reviewed guide</button>{% if record.reviewed_text is not none %}<a class="button secondary" href="{{ url_for('learning.download_guide',guide_id=record.id) }}">Download text</a>{% endif %}</div></form>
+</section>
+<form method="post" action="{{ url_for('learning.delete_guide',guide_id=record.id) }}" data-confirm="Delete this guide and its saved text?" class="saved">{{ csrf() }}<button class="text-button danger">Delete this guide</button></form>
+{% endblock %}

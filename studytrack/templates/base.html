@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}StudyTrack{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static',filename='favicon.svg') }}">
+    <script defer src="{{ url_for('static',filename='app.js') }}"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <aside class="sidebar">
+      <a class="brand" href="{{ url_for('web.dashboard') }}">
+        <span class="mark">✓</span> StudyTrack</a>
+      <p class="tagline">
+        Stay on track.
+        <br>
+        Keep improving.
+      </p>
+      <nav aria-label="Main navigation">
+        <a class="{{ 'active' if request.endpoint == 'web.dashboard' }}"
+           href="{{ url_for('web.dashboard') }}">Overview</a>
+        <a class="{{ 'active' if request.endpoint in ['web.courses','web.course_detail'] }}"
+           href="{{ url_for('web.courses') }}">Courses & assignments</a>
+        <a class="{{ 'active' if request.endpoint in ['web.study','web.save_plan'] }}"
+           href="{{ url_for('web.study') }}">Study planner</a>
+        <a class="{{ 'active' if request.endpoint and request.endpoint.startswith('learning.') }}" href="{{ url_for('learning.library') }}">Lectures & study guides</a>
+      </nav>
+      <div class="sidebar-foot">
+        <span class="small-label">YOUR WORKSPACE</span>
+        <p>Personal, local edition</p>
+        <p class="muted">Your coursework, at your pace.</p>
+      </div>
+    </aside>
+    <main id="main">
+      <header class="topbar">
+        <span>My semester</span>
+        <span>{{ today }}</span>
+      </header>
+      {% for category,message in get_flashed_messages(with_categories=true) %}
+        <div role="status" class="notice {{ category }}">{{ message }}</div>
+      {% endfor %}
+      {% block content %}{% endblock %}
+      <footer>
+        StudyTrack Software <span>Saved on this computer</span>
+      </footer>
+    </main>
+  </body>
+</html>
+{% macro csrf() %}
+  <input type="hidden" name="csrf" value="{{ session.csrf }}">
+{% endmacro %}

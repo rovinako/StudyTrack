@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% from 'base.html' import csrf with context %}
+{% block title %}{{ course.title }} lectures · StudyTrack{% endblock %}
+{% block content %}
+<div class="breadcrumbs"><a href="{{ url_for('web.course_detail',course_id=course.id) }}">{{ course.title }}</a> / Study materials</div>
+<div class="page-title"><div><p class="eyebrow">YOUR LECTURE LIBRARY</p><h1>What are you learning?</h1><p class="muted">Keep your materials together. Build a guide from the lectures you choose.</p></div><a class="button" href="{{ url_for('learning.create_guide',course_id=course.id) }}">Build a study guide</a></div>
+<div class="split">
+<section class="panel"><h2>Upload a lecture</h2>
+<form class="stack" method="post" enctype="multipart/form-data" data-loading>
+{{ csrf() }}
+<label>Lecture title (optional)<input name="title" maxlength="180" placeholder="e.g. Week 4 — Functional programming"></label>
+<label>Lecture file<input type="file" name="lecture" accept=".pdf,.pptx,.docx,.txt,.md" required></label>
+<p class="caption">PDF, PowerPoint (.pptx), Word (.docx), or text. Up to 10 MB and 150 PDF pages or slides. Scanned images need OCR first. Text is extracted; images, diagrams, and speaker notes are not included.</p>
+<p class="caption">Extracted text stays on this computer. Original files are discarded after reading. Nothing goes to AI unless you choose AI help when building a guide.</p>
+<button>Upload lecture</button>
+</form></section>
+<section class="panel"><h2>{{ lectures|length }} uploaded lecture{{ '' if lectures|length == 1 else 's' }}</h2>
+{% for lecture in lectures %}<div class="lecture-row"><div><a href="{{ url_for('learning.lecture',lecture_id=lecture.id) }}"><strong>{{ lecture.title }}</strong></a><p class="caption">{{ lecture.filename }} · {{ lecture.sections|length }} text sections</p></div>
+<form method="post" action="{{ url_for('learning.delete_lecture',lecture_id=lecture.id) }}" data-confirm="Remove this lecture? Existing guides keep their excerpts.">{{ csrf() }}<button class="text-button danger">Remove</button></form></div>
+{% else %}<p class="muted">Upload your first lecture to create a guide based on your actual course material.</p>{% endfor %}
+</section></div>
+{% endblock %}

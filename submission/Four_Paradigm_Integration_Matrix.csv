@@ -1,0 +1,5 @@
+Paradigm,Application component,Language or technology,Purpose,Evidence it works
+Imperative,routes.py and learning.py,Python / Flask,"Order form validation, calculations and persistence",WebWorkflow and LearningWorkflow tests
+Object oriented,domain.py Course and Assignment,Python dataclasses,Validate named domain values and own course rules,Domain tests; Gradebook prototype reuses objects
+Functional,DSL_1.rkt and DSL_2.rkt through racket_bridge.py,Racket; pure Python fallback,Compute weighted progress and time allocations,16 RackUnit checks; real bridge parity test
+Declarative,storage.py UPCOMING_SQL and schema,SQL / SQLite,"Retrieve, filter, join and order coursework",Upcoming window boundary tests; SQL prototype returns A

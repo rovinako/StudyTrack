@@ -1,0 +1,15 @@
+Functional programming: pure functions
+Sample lecture for trying StudyTrack, not an official course handout.
+A pure function always returns the same output for the same input. It does not change variables outside its own scope or perform input/output. For example, a function that adds two numbers can be pure. Printing to a console or updating a database is a side effect. Pure functions make repeated calculations easier to test because hidden state does not affect the result.
+
+Immutability and new values
+Immutable data stays unchanged after it is created. A transformation produces a new value instead of modifying the original value. In a grade calculator, the input list of scores can remain unchanged while the calculation returns a new grade summary. This makes the same input reusable by several calculations without one calculation changing another calculation's data.
+
+Map and filter
+Map applies a function to every item in a collection and returns the transformed collection. Filter retains the items for which a predicate is true. To calculate current grades, first filter out assignments with missing scores, then map each graded assignment to its weighted contribution. A score of zero is a real score and must not be filtered out. A missing score represents work that has not been graded yet.
+
+Recursion and base cases
+A recursive function solves a problem using a smaller version of the same problem. A base case stops the recursion. Each recursive step must move toward that base case. For example, summing a list can return zero for an empty list and otherwise add the first item to the sum of the rest. If there is no reachable base case, the function may continue until it exhausts the call stack.
+
+Weighted grades
+An assignment score is multiplied by its weight in the final course grade. A score of 80 with weight 40 percent contributes 32 final-grade points. A score of 90 with weight 60 percent contributes 54 points. Together they produce a final result of 86 percent. If only the first assignment is graded, the current average is 80 percent on graded work, while the earned contribution toward the final course result remains 32 points.

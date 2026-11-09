@@ -1,0 +1,44 @@
+Verification date: November 8, 2026
+
+test_invalid_requests_do_not_call_api (test_assistants.CompanyAssistants.test_invalid_requests_do_not_call_api) ... ok
+test_provider_failure_is_visible (test_assistants.CompanyAssistants.test_provider_failure_is_visible) ... ok
+test_role_specific_prompt_and_data (test_assistants.CompanyAssistants.test_role_specific_prompt_and_data) ... ok
+test_budget_and_target_influence (test_learning.GoalsAndGuides.test_budget_and_target_influence) ... ok
+test_empty_zero_complete_partial (test_learning.GoalsAndGuides.test_empty_zero_complete_partial) ... ok
+test_focus_and_source_selection (test_learning.GoalsAndGuides.test_focus_and_source_selection) ... ok
+test_recall_prefers_topic_over_document_boilerplate (test_learning.GoalsAndGuides.test_recall_prefers_topic_over_document_boilerplate) ... ok
+test_required_average_not_current_grade (test_learning.GoalsAndGuides.test_required_average_not_current_grade) ... ok
+test_ai_failure_keeps_guide_and_opt_in (test_learning.LearningWorkflow.test_ai_failure_keeps_guide_and_opt_in) ... ok
+test_invalid_cross_course_selection_and_escaping (test_learning.LearningWorkflow.test_invalid_cross_course_selection_and_escaping) ... ok
+test_upload_target_guide_review_download_restart (test_learning.LearningWorkflow.test_upload_target_guide_review_download_restart) ... ok
+test_grounding_and_minimal_payload (test_learning.LectureAI.test_grounding_and_minimal_payload) ... ok
+test_formats_and_presentation_order (test_learning.Uploads.test_formats_and_presentation_order) ... ok
+test_invalid_empty_large_image_only (test_learning.Uploads.test_invalid_empty_large_image_only) ... ok
+test_xml_entities_and_timeout (test_learning.Uploads.test_xml_entities_and_timeout) ... ok
+test_failure (test_studytrack.AIAdapter.test_failure) ... ok
+test_malformed_response (test_studytrack.AIAdapter.test_malformed_response) ... ok
+test_response_and_privacy (test_studytrack.AIAdapter.test_response_and_privacy) ... ok
+test_unconfigured (test_studytrack.AIAdapter.test_unconfigured) ... ok
+test_declarative_prototype (test_studytrack.Calculations.test_declarative_prototype) ... ok
+test_invalid_inputs (test_studytrack.Calculations.test_invalid_inputs) ... ok
+test_pure_repeatable_and_unchanged (test_studytrack.Calculations.test_pure_repeatable_and_unchanged) ... ok
+test_racket_timeout (test_studytrack.Calculations.test_racket_timeout) ... ok
+test_real_racket_parity (test_studytrack.Calculations.test_real_racket_parity) ... ok
+test_schedule_budget (test_studytrack.Calculations.test_schedule_budget) ... ok
+test_shared_grade_fixture (test_studytrack.Calculations.test_shared_grade_fixture) ... ok
+test_zero_missing_and_empty (test_studytrack.Calculations.test_zero_missing_and_empty) ... ok
+test_complete_saved_workflow (test_studytrack.WebWorkflow.test_complete_saved_workflow) ... ok
+test_csrf_and_escape (test_studytrack.WebWorkflow.test_csrf_and_escape) ... ok
+test_delete (test_studytrack.WebWorkflow.test_delete) ... ok
+test_empty_planner_and_demo_protection (test_studytrack.WebWorkflow.test_empty_planner_and_demo_protection) ... ok
+test_sql_boundaries (test_studytrack.WebWorkflow.test_sql_boundaries) ... ok
+test_validation_and_weight_transaction (test_studytrack.WebWorkflow.test_validation_and_weight_transaction) ... ok
+
+----------------------------------------------------------------------
+Ran 33 tests in 43.701s
+
+OK
+
+raco test: (submod (file "racket/DSL_1.rkt") test)
+raco test: (submod (file "racket/DSL_2.rkt") test)
+16 tests passed

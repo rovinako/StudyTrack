@@ -1,0 +1,3 @@
+raco test: (submod (file "racket/DSL_1.rkt") test)
+raco test: (submod (file "racket/DSL_2.rkt") test)
+16 tests passed

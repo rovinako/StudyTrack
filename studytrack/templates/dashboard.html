@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% from 'base.html' import csrf with context %}
+{% block content %}
+  <div class="page-title">
+    <div>
+      <p class="eyebrow">A LITTLE PROGRESS, EVERY DAY</p>
+      <h1>Your semester, in view.</h1>
+      <p class="muted">See where you stand and what needs your attention.</p>
+    </div>
+    <a class="button" href="{{ url_for('web.courses') }}">Add a course</a>
+  </div>
+  {% if not courses %}
+    <section class="empty">
+      <div class="empty-symbol">✓</div>
+      <h2>Make room for a clearer semester.</h2>
+      <p>
+        Add your first course, then track assignments and grades.
+        <br>
+        Or explore with fictional sample data.
+      </p>
+      <div class="actions">
+        <a class="button" href="{{ url_for('web.courses') }}">Add my first course</a>
+        <form method="post" action="{{ url_for('web.demo') }}">
+          {{ csrf() }}
+          <button class="secondary">Try sample courses</button>
+        </form>
+      </div>
+    </section>
+  {% else %}
+    <div class="stats">
+      <div>
+        <span>Courses this semester</span>
+        <strong>{{ courses|length }}</strong>
+      </div>
+      <div>
+        <span>Due in the next 7 days</span>
+        <strong>{{ upcoming|length }}</strong>
+      </div>
+      <div>
+        <span>Overdue assignments</span>
+        <strong>{{ overdue|length }}</strong>
+      </div>
+    </div>
+    <div class="section-title">
+      <h2>Course progress</h2>
+      <a href="{{ url_for('web.courses') }}">Manage courses</a>
+    </div>
+    <div class="course-grid">
+      {% for c in courses %}
+        <a class="course-card"
+           href="{{ url_for('web.course_detail',course_id=c.id) }}">
+          <div class="card-top">
+            <span class="course-code">{{ c.title }}</span>
+            <span class="muted">{{ c.open_count }} open</span>
+          </div>
+          <strong class="grade-large">{{ c.summary.current|grade }}</strong>
+          <p class="muted">Current grade · target {{ c.target|grade }}</p>
+          <progress value="{{ c.summary.graded_weight }}"
+                    max="100"
+                    aria-label="Graded weight for {{ c.title }}">
+          </progress>
+          <p class="caption">{{ '%g'|format(c.summary.graded_weight) }}% of final grade recorded</p>
+        </a>
+      {% endfor %}
+    </div>
+    <div class="dashboard-bottom">
+      <section class="panel">
+        <div class="section-title">
+          <h2>Coming up</h2>
+          <span class="muted">Next 7 days</span>
+        </div>
+        {% for a in upcoming %}
+          <a class="task-row"
+             href="{{ url_for('web.course_detail',course_id=a.course_id) }}">
+            <div>
+              <strong>{{ a.title }}</strong>
+              <span class="muted">{{ a.course }}</span>
+            </div>
+            <div>
+              <strong>{{ a.due }}</strong>
+              <span class="muted">{{ a.minutes }} min</span>
+            </div>
+          </a>
+        {% else %}
+          <p class="muted">No open assignments due in the next week.</p>
+        {% endfor %}
+        {% if overdue %}
+          <h3 class="overdue">Past due</h3>
+          {% for a in overdue %}
+            <a class="task-row"
+               href="{{ url_for('web.course_detail',course_id=a.course_id) }}">
+              <div>
+                <strong>{{ a.title }}</strong>
+                <span>{{ a.course }}</span>
+              </div>
+              <span class="overdue">{{ a.due }}</span>
+            </a>
+          {% endfor %}
+        {% endif %}
+      </section>
+      <section class="planner-callout">
+        <p class="eyebrow">ONE STEP AT A TIME</p>
+        <h2>A plan for the time you have.</h2>
+        <p>Choose your available study time. Start with the closest deadlines and review your plan before saving.</p>
+        <a class="button light" href="{{ url_for('web.study') }}">Plan a study session</a>
+      </section>
+    </div>
+  {% endif %}
+{% endblock %}

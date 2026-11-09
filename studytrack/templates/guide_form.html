@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% from 'base.html' import csrf with context %}
+{% block title %}{{ course.title }} study guide · StudyTrack{% endblock %}
+{% block content %}
+<div class="breadcrumbs"><a href="{{ url_for('web.course_detail',course_id=course.id) }}">{{ course.title }}</a> / Study guide</div>
+<div class="page-title"><div><p class="eyebrow">YOUR GOAL. YOUR LECTURES.</p><h1>A plan for what you need to learn</h1><p class="muted">Choose the material and time you have. Get source passages, a timed plan, and recall practice.</p></div></div>
+{% include '_goal.html' %}
+{% if lectures %}
+<form method="post" class="panel stack" data-loading>{{ csrf() }}
+<div class="form-grid guide-options">
+<label>Available study minutes<input type="number" name="available" min="10" max="480" step="1" value="{{ values.available }}" required></label>
+<label>Preparing for<select name="assignment_id"><option value="">General course review</option>{% for a in assignments if a.score is none %}<option value="{{ a.id }}" {{ 'selected' if values.assignment_id == a.id|string }}>{{ a.title }} · {{ a.due }} · {{ '%g'|format(a.weight) }}%</option>{% endfor %}</select></label>
+<label>Focus topic (optional)<input name="focus" maxlength="180" value="{{ values.focus }}" placeholder="e.g. recursion, lexical scope"></label>
+</div>
+<fieldset><legend>Lectures to use</legend><p class="caption">The guide selects up to six passages. A focus topic searches for matching words. Leave it empty for an overview across these files.</p>
+{% for lecture in lectures %}<label class="check lecture-choice"><input type="checkbox" name="lecture_ids" value="{{ lecture.id }}" {{ 'checked' if lecture.id|string in values.lecture_ids }}><span>{{ lecture.title }} <small class="muted">({{ lecture.sections|length }} sections)</small></span></label>{% endfor %}</fieldset>
+<label class="check"><input type="checkbox" name="use_ai" value="yes" {{ 'disabled' if not ai_ready }} {{ 'checked' if values.use_ai and ai_ready }}> Add AI explanations and practice questions</label>
+{% if ai_ready %}<p class="caption">If selected, only the chosen excerpts, focus topic, target percentage, and session minutes go to OpenAI. The full gradebook and original files stay local. Review the AI text against the sources.</p>{% else %}<p class="caption">AI is not connected. Your local guide still includes lecture passages, a timed plan, and recall questions. AI explanations need a server API key and model.</p>{% endif %}
+<div class="action-row"><button>Build my study guide</button><a href="{{ url_for('learning.materials',course_id=course.id) }}">Manage lectures</a></div>
+</form>
+{% else %}<section class="empty"><h2>Add a lecture to get started</h2><p>Your guide will use your course materials instead of generic study advice.</p><a class="button" href="{{ url_for('learning.materials',course_id=course.id) }}">Upload a lecture</a></section>{% endif %}
+{% if history %}<section class="panel saved"><h2>Recent study guides</h2>{% for item in history %}<div class="task-row"><a href="{{ url_for('learning.view_guide',guide_id=item.id) }}">{{ item.created }} UTC</a><span>{{ 'Reviewed and saved' if item.reviewed_text is not none else 'Draft' }}</span></div>{% endfor %}</section>{% endif %}
+{% endblock %}
